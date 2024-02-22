@@ -48,7 +48,7 @@ export const ModalContainer = styled.div<ModalContainerProps>`
 	display: grid;
 	grid-template-rows: auto 1fr;
 
-	overflow: ${(props: any) => props.overflow};
+	overflow: hidden;
 	${(props: any) =>
 		props.animate
 			? css`
@@ -71,6 +71,7 @@ export const ModalTitle = styled.div`
 		line-height: 1.2;
 		margin: 0;
 		word-break: break-all;
+		color: ${(props) => props.theme.preferenceModal.optionActive.color};
 	}
 	h3,
 	h4 {
@@ -97,6 +98,7 @@ export const ModalTitle = styled.div`
 export const ModalContent = styled.div`
 	display: grid;
 	grid-template-columns: 200px 1fr;
+	overflow: hidden;
 	.options {
 		display: flex;
 		flex-direction: column;
@@ -116,20 +118,74 @@ export const PreferencesOption = styled.div<{ isActive: boolean }>`
 	padding: 0 10px;
 	cursor: pointer;
 	user-select: none;
-	color: ${(props) => (props.isActive ? '#3699FF' : 'rgb(94, 98, 120)')};
-	background-color: ${(props) => (props.isActive ? 'rgba(236, 248, 255, 1)' : 'transparent')};
-  transition: .3s;
-  &:hover{
-    background-color: rgba(236, 248, 255, 1);
-  }
+	color: ${(props) => (props.isActive ? props.theme.preferenceModal.optionActive.color : 'rgb(94, 98, 120)')};
+	background-color: ${(props) => (props.isActive ? props.theme.preferenceModal.optionActive.background : 'transparent')};
+	transition: 0.3s;
+	&:hover {
+		background-color: ${(props) => props.theme.preferenceModal.optionActive.background};
+	}
 	svg {
 		font-size: 22px;
-    margin-left: 10px;
+		margin-left: 10px;
 	}
 	p {
 		margin-left: 10px;
 	}
 `;
+
 export const PreferenceSection = styled.div`
-padding: 20px;
+	padding: 20px;
+	overflow: auto;
+	scrollbar-width: thin;
+	
+::-webkit-scrollbar {
+  width: 0px;
+  position: absolute;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
+  border: transparent;
+}
+	/* scrollbar-color: transparent transparent; */
+	/* -webkit-scrollbar-width: thin;
+	-webkit-scrollbar-color: transparent transparent;
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		display: none;
+	} */
 `;
+
+export const DevicesList = styled.div``;
+
+export const Device = styled.div<{ isActive: boolean }>`
+	min-height: 40px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px 10px;
+	cursor: pointer;
+	user-select: none;
+	color: ${(props) => (props.isActive ? props.theme.preferenceModal.optionActive.color : 'rgb(94, 98, 120)')};
+	background-color: ${(props) => (props.isActive ? props.theme.preferenceModal.optionActive.background : 'transparent')};
+
+	&:hover {
+		background-color: ${(props) => props.theme.preferenceModal.optionActive.background};
+	}
+
+	p {
+		align-self: center;
+		/* max-width: 70%; */
+	}
+`;
+
+export const ThemeIconGroup = styled.div`
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	flex-wrap: wrap
+`

@@ -1,38 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-
-import { IoMdClose } from 'react-icons/io';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, ModalContainer, ModalTitle, ModalContent, PreferenceSection, PreferencesOptionsContainer, PreferencesOption } from './styles';
+
 import ReactDOM from 'react-dom';
 import AgoraRTC from 'agora-rtc-sdk-ng';
+
+import { IoMdClose } from 'react-icons/io';
 import { LiaFileAudio } from 'react-icons/lia';
-import { IoMdVideocam } from 'react-icons/io';
+
 interface Props {
-	closeModal: any;
-	isOpen: any;
+	closeModal:  React.MouseEventHandler<SVGAElement>;
+	isOpen: boolean
 }
+
 import { MdOutlinePalette } from 'react-icons/md';
 import { BsCameraVideo } from 'react-icons/bs';
-import { FaPalette } from 'react-icons/fa6';
+import DevicesTab from './DevicesTab';
+import { ThemeTab } from './ThemesTab';
+
+
 export default function PageModal({ closeModal, isOpen }: Props) {
-	const ref: React.RefObject<any> = useRef(null);
+	const ref = useRef<HTMLDivElement>(null);
 
-	const [cameras, setCameras] = useState<any[]>([]);
-	const [microphones, setMicrophones] = useState<any[]>([]);
+	const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
+	const [microphones, setMicrophones] = useState<MediaDeviceInfo[]>([]);
 	const [section, setSection] = useState<string>('Appearance');
-
-	// const handleClickOutside = (event: any) => {
-	//   if (ref.current && !ref.current.contains(event.target) && event.target.tagName !== 'BUTTON') {
-	//     closeModal();
-	//   }
-	// };
-
-	// useEffect(() => {
-	//   window.addEventListener("mousedown", handleClickOutside);
-
-	//   return () => {
-	//     document.removeEventListener("mousedown", handleClickOutside);
-	//   };
-	// }, [ref]);
 
 	useEffect(() => {
 		document.body.style.overflow = isOpen ? 'hidden' : 'auto';
@@ -54,7 +45,7 @@ export default function PageModal({ closeModal, isOpen }: Props) {
 
 	return ReactDOM.createPortal(
 		<Container>
-			<ModalContainer width={'800px'} height={'500px'} animate={true} ref={ref} overflow={'auto'}>
+			<ModalContainer width={'810px'} height={'500px'} animate={true} ref={ref} overflow={'auto'}>
 				<ModalTitle>
 					<h2>Preferences</h2>
 					<IoMdClose onClick={closeModal} />
@@ -77,9 +68,9 @@ export default function PageModal({ closeModal, isOpen }: Props) {
 						</div>
 					</PreferencesOptionsContainer>
 					<PreferenceSection>
-						{section === 'Appearance' && <p>Appearance</p>}
-						{section === 'Audio' && <p>Audio</p>}
-						{section === 'Video' && <p>Video</p>}
+						{section === 'Appearance' && <ThemeTab/>}
+						{section === 'Audio' && <DevicesTab devices={microphones} typeDevice="microphone"/>}
+						{section === 'Video' && <DevicesTab devices={cameras} typeDevice="camera"/>}
 					</PreferenceSection>
 				</ModalContent>
 			</ModalContainer>

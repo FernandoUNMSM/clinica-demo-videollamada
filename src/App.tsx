@@ -1,21 +1,22 @@
-import { useState } from 'react';
 import './App.css';
-import { VideoRoom } from './components/VideoRoom';
-import PageModal from './components/PreferencesModal/PreferencesModal';
+import { VideoRoom } from './pages/VideoRoom/VideoRoom';
+import DevicesContext from './context/userContext';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Lobby } from './pages/Lobby';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './styles/themes';
+import { useContext } from 'react';
 
 function App() {
-	const [joined, setJoined] = useState(false);
-
-  return (
-		<div className="App h-full">
-			<PageModal closeModal={() => {}} isOpen={true} />
-			{!joined && <button onClick={() => setJoined(true)}>Join Room</button>}
-			{joined && (
-        <div className="bg-gradient-to-b from-[#0496c1] to-[#0065ab] h-full">
-					<VideoRoom />
-        </div>
-			)}
-		</div>
+	const { theme: themeColor } = useContext(DevicesContext);
+	return (
+		<ThemeProvider theme={theme[themeColor]}>
+			<Routes>
+				<Route path="/" element={<Navigate to="/lobby" />} />
+				<Route path="/lobby" element={<Lobby />} />
+				<Route path="/videoRoom" element={<VideoRoom />} />
+			</Routes>
+		</ThemeProvider>
 	);
 }
 
