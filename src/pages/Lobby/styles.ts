@@ -84,6 +84,8 @@ export const LobbyPage = styled.div`
     text-align: center;
     margin-bottom: 20px;
     animation: ${inputAnimation} 2s ease;
+    border: none;
+    color: white;
   }
 	button {
 		color: black;
@@ -96,7 +98,7 @@ export const LobbyPage = styled.div`
     transition: .3s;
     animation: ${animationBottom} 2s ease;
 	}
-	.content2 {
+	.title h1, .title p{
 		font-family: 'Lato', sans-serif !important;
 	}
 

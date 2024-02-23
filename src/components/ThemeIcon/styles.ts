@@ -1,7 +1,12 @@
 import styled from 'styled-components';
+import { Theme } from '../../models/typeUser';
 
-export const ThemeIconContainer = styled.div<{ localTheme: any }>`
+export const ThemeIconContainer = styled.div<{ localTheme: Theme }>`
 	cursor: pointer;
+	border-radius: 10px;
+	overflow: hidden;
+	transition: .3s;
+
 	rect {
 		fill: ${(props) => props.localTheme.videoRoom.background};
 	}
@@ -14,5 +19,8 @@ export const ThemeIconContainer = styled.div<{ localTheme: any }>`
 	}
 	g circle + path {
 		fill: ${(props) => props.localTheme.circleButton.on};
+	}
+	&:hover{
+		opacity: .8;
 	}
 `;

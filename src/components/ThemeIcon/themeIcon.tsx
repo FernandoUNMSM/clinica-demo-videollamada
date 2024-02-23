@@ -1,17 +1,17 @@
 import { useContext } from 'react';
-import { theme } from '../styles/themes';
 import { ThemeIconContainer } from './styles';
-import DevicesContext from '../context/userContext';
+import DevicesContext from '../../context/userContext';
+import { Theme } from '../../models/typeUser';
 
 interface Props {
-	colorTheme: string;
+	theme: Theme;
 }
 
-export const ThemeIcon = ({ colorTheme }: Props) => {
-	const { setTheme } = useContext(DevicesContext);
+export const ThemeIcon = ({ theme }: Props) => {
+	const { setThemeSelected } = useContext(DevicesContext);
 	return (
 		<>
-			<ThemeIconContainer localTheme={theme[colorTheme]} onClick={() => setTheme(colorTheme)}>
+			<ThemeIconContainer localTheme={theme} onClick={() => setThemeSelected(theme)}>
 				<svg width="274" height="175" viewBox="0 0 274 175" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<rect width="274" height="175" />
 					<path d="M20 19C20 17.3431 21.3431 16 23 16H251C252.657 16 254 17.3431 254 19V138C254 139.657 252.657 141 251 141H23C21.3431 141 20 139.657 20 138V19Z" />

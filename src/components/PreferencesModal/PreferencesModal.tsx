@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, ModalContainer, ModalTitle, ModalContent, PreferenceSection, PreferencesOptionsContainer, PreferencesOption } from './styles';
 
 import ReactDOM from 'react-dom';
@@ -14,13 +14,11 @@ interface Props {
 
 import { MdOutlinePalette } from 'react-icons/md';
 import { BsCameraVideo } from 'react-icons/bs';
-import DevicesTab from './DevicesTab';
-import { ThemeTab } from './ThemesTab';
+import DevicesTab from './DeviceTab/DevicesTab';
+import { ThemeTab } from './ThemeTab/ThemesTab';
 
 
-export default function PageModal({ closeModal, isOpen }: Props) {
-	const ref = useRef<HTMLDivElement>(null);
-
+export default function PreferencesModal({ closeModal, isOpen }: Props) {
 	const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
 	const [microphones, setMicrophones] = useState<MediaDeviceInfo[]>([]);
 	const [section, setSection] = useState<string>('Appearance');
@@ -45,9 +43,9 @@ export default function PageModal({ closeModal, isOpen }: Props) {
 
 	return ReactDOM.createPortal(
 		<Container>
-			<ModalContainer width={'810px'} height={'500px'} animate={true} ref={ref} overflow={'auto'}>
+			<ModalContainer>
 				<ModalTitle>
-					<h2>Preferences</h2>
+					<h2 className='title'>Preferences</h2>
 					<IoMdClose onClick={closeModal} />
 				</ModalTitle>
 				<ModalContent>

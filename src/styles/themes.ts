@@ -1,4 +1,46 @@
-export const theme: any = {
+import { Themes } from "../models/typeUser";
+
+export const themes: Themes = {
+  light: {
+    videoRoom:{
+      background: '#faf9f5',
+    },
+    circleButton: {
+      off: '#FE4747',
+      offHover: '#e62e2e',
+      on: '#262424',
+      onHover: '#333030'
+    },
+    videoPlayer:{
+      background: '#2c2c34',
+    },
+    preferenceModal: {
+      optionActive: {
+        color: '#0496c1',
+        background: '#f1fafe'
+      }
+    }
+  },
+  dark: {
+    videoRoom:{
+      background: '#292929',
+    },
+    circleButton: {
+      off: '#FE4747',
+      offHover: '#e62e2e',
+      on: '#262424',
+      onHover: '#333030'
+    },
+    videoPlayer:{
+      background: '#2c2c34',
+    },
+    preferenceModal: {
+      optionActive: {
+        color: '#0496c1',
+        background: '#f1fafe'
+      }
+    }
+  },
   pink: {
     videoRoom:{
       background: '#f7d3e2',
@@ -79,71 +121,44 @@ export const theme: any = {
       }
     }
   },
-  'manz': {
-    '50': '#fdfde9',
-    '100': '#fafac7',
-    '200': '#f5f184',
-    '300': '#f1e553',
-    '400': '#ead425',
-    '500': '#dbbc17',
-    '600': '#bd9411',
-    '700': '#976b11',
-    '800': '#7d5616',
-    '900': '#6b4618',
-    '950': '#3e250a',
-},
-
-  'mint-green': {
-    '50': '#effef2',
-    '100': '#dafee3',
-    '200': '#b8fac7',
-    '300': '#8af5a4',
-    '400': '#43e56b',
-    '500': '#1acd47',
-    '600': '#0faa36',
-    '700': '#10852e',
-    '800': '#126929',
-    '900': '#115624',
-    '950': '#033011',
-},
-
-  'anakiwa': {
-    '50': '#f1fafe',
-    '100': '#e2f4fc',
-    '200': '#bee9f9',
-    '300': '#8adaf5',
-    '400': '#43c5ed',
-    '500': '#1baedc',
-    '600': '#0e8cbb',
-    '700': '#0c7098',
-    '800': '#0e5f7e',
-    '900': '#124e68',
-    '950': '#0c3245',
-},
-  'illusion': {
-    '50': '#fcf3f7',
-    '100': '#fae9f1',
-    '200': '#f7d3e2',
-    '300': '#f0a3c2',
-    '400': '#e97da6',
-    '500': '#de5686',
-    '600': '#cb3764',
-    '700': '#b0264c',
-    '800': '#912340',
-    '900': '#7a2138',
-    '950': '#4a0d1c',
-},
-  'tundora': {
-    '50': '#f8f7f8',
-    '100': '#f0eeee',
-    '200': '#dddadb',
-    '300': '#bfbabc',
-    '400': '#9c9498',
-    '500': '#80777b',
-    '600': '#696064',
-    '700': '#554f51',
-    '800': '#454042',
-    '900': '#3f3b3d',
-    '950': '#2a2728',
-}
+  sakura: {
+    videoRoom:{
+      background: 'sakuraImage',
+    },
+    circleButton: {
+      off: '#cb3764',
+      offHover: '#b0264c',
+      on: '#262424',
+      onHover: '#333030'
+    },
+    videoPlayer:{
+      background: 'transparent',
+    },
+    preferenceModal: {
+      optionActive: {
+        color: '#de5686',
+        background: '#fcf3f7'
+      }
+    }
+  },
+  rain: {
+    videoRoom:{
+      background: 'rainImage',
+    },
+    circleButton: {
+      off: '#8959f7',
+      offHover: '#7c39ee',
+      on: '#262424',
+      onHover: '#333030'
+    },
+    videoPlayer:{
+      background: 'transparent',
+    },
+    preferenceModal: {
+      optionActive: {
+        color: '#8959f7',
+        background: '#f5f3ff'
+      }
+    }
+  },
 };

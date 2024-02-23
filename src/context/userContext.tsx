@@ -1,24 +1,23 @@
-import { useState, createContext } from 'react'
+import { useState, createContext, Dispatch, SetStateAction } from 'react';
+import { Theme } from '../models/typeUser';
+import { themes } from '../styles/themes';
 
 interface Devices {
-  camera?: any,
-  microphone?: any,
-  setCamera: any,
-  setMicrophone: any,
-  theme: string,
-  setTheme: any,
+	themeSelected: Theme;
+	setThemeSelected: Dispatch<SetStateAction<Theme>>;
 }
 
-const DevicesContext = createContext<Devices>({})
+const DevicesContext = createContext<Devices>({});
 
 export function DevicesContextProvider({ children }: any) {
-  const [camera, setCamera] = useState({})
-  const [microphone, setMicrophone] = useState(true)
-  const [theme, setTheme] = useState<string>('blue')
+	const [themeSelected, setThemeSelected] = useState<Theme>(themes.sakura);
 
-  return <DevicesContext.Provider value={{ camera, setCamera, microphone, setMicrophone, theme, setTheme }} >
-    {children}
-  </DevicesContext.Provider>
+
+	return (
+		<DevicesContext.Provider value={{ themeSelected, setThemeSelected }}>
+			{children}
+		</DevicesContext.Provider>
+	);
 }
 
-export default DevicesContext
+export default DevicesContext;

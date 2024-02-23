@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Device, DevicesList } from './styles';
-import DevicesContext from '../../context/userContext';
+import AgoraContext from '../../../context/agoraContext';
 
 interface Props {
 	devices: MediaDeviceInfo[];
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const DevicesTab = ({ devices, typeDevice }: Props) => {
-	const { camera, microphone, setCamera, setMicrophone } = useContext(DevicesContext);
+	const { camera, microphone, setCamera, setMicrophone } = useContext(AgoraContext);
 	const [actualDevice, setActualDevice] = useState<MediaDeviceInfo>(typeDevice === 'camera' ? camera : microphone);
 
 	useEffect(() => {
