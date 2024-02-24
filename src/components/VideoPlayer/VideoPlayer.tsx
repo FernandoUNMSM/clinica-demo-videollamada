@@ -21,6 +21,9 @@ export const VideoPlayer = ({ user }: { user: User }) => {
 					</MicrophoneOffIcon>
 				)}
 				<div ref={ref} id={`videoplayer_${user.uid}`} className="videoPlayer"></div>
+				<div className="userName">
+					<p>{user.name}</p>
+				</div>
 			</UserCameraOn>
 		</>
 	);

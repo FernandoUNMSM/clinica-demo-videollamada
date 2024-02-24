@@ -2,12 +2,10 @@ import { UID } from 'agora-rtc-react';
 
 export type User = {
 	uid: UID;
-	// isHost: boolean;
+	name: string;
 	isMicrophoneOn: boolean;
-	// isCameraOff: boolean;
 	isSpeaking: boolean;
-	// videoTrack: any;
-	// audioTrack: any;
+
 };
 
 export type Theme = {

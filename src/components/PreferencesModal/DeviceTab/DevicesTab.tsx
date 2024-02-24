@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Device, DevicesList } from './styles';
 import AgoraContext from '../../../context/agoraContext';
 
@@ -8,23 +8,25 @@ interface Props {
 }
 
 const DevicesTab = ({ devices, typeDevice }: Props) => {
-	const { camera, microphone, setCamera, setMicrophone, changeCamera } = useContext(AgoraContext);
+	const { camera, microphone, setCamera, setMicrophone, changeCamera, changeMicrophone } = useContext(AgoraContext);
 	const [actualDevice, setActualDevice] = useState<MediaDeviceInfo>(typeDevice === 'camera' ? camera : microphone);
 
-	useEffect(() => {
+	const toggleDevice = (device: MediaDeviceInfo) =>{
+		setActualDevice(device)
 		if (typeDevice === 'camera') {
-			changeCamera(actualDevice.deviceId);
-			setCamera(actualDevice);
+			changeCamera(device.deviceId);
+			setCamera(device);
 		} else {
-			setMicrophone(actualDevice);
+			changeMicrophone(device.deviceId)
+			setMicrophone(device);
 		}
-	}, [actualDevice]); //eslint-disable-line
+	}
 
 	return (
 		<>
 			<DevicesList>
 				{devices.map((device: MediaDeviceInfo) => (
-					<Device onClick={() => setActualDevice(device)} isActive={device.deviceId === actualDevice?.deviceId}>
+					<Device onClick={() => toggleDevice(device)} isActive={device.deviceId === actualDevice?.deviceId}>
 						<p>{device.label}</p>
 					</Device>
 				))}

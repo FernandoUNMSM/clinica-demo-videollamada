@@ -15,6 +15,17 @@ export const UserCameraOn = styled.div<{ microphoneoff: boolean; isspeaking: boo
 	.videoPlayer{
 		width: 100%;
 	}
+	.userName{
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+		p{
+			color: #fff;
+			font-size: 20px;
+			font-weight: 500;
+			margin: 0;
+		}
+	}
 `;
 
 export const MicrophoneOffIcon = styled.div`
