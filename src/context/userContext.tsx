@@ -7,7 +7,10 @@ interface Devices {
 	setThemeSelected: Dispatch<SetStateAction<Theme>>;
 }
 
-const DevicesContext = createContext<Devices>({});
+const DevicesContext = createContext<Devices>({
+	themeSelected: themes.blue,
+	setThemeSelected: () => {}
+});
 
 export function DevicesContextProvider({ children }: any) {
 	const [themeSelected, setThemeSelected] = useState<Theme>(themes.sakura);

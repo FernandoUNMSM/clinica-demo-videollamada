@@ -49,7 +49,7 @@ export function AgoraContextProvider({ children }: any) {
 		channel.on('MemberJoined', handleMemberJoined);
 		channel.on('MemberLeft', handleMemberLeft);
 
-		window.addEventListener('beforeunload', leaveRtmChannel);
+		window.addEventListener('beforeunload', leaveRoom);
 	};
 
 	const enterRoom = async (name: string) => {
@@ -87,7 +87,6 @@ export function AgoraContextProvider({ children }: any) {
 	};
 
 	const initVolumeIndicator = async () => {
-		AgoraRTC.setParameter('AUDIO_VOLUME_INDICATION_INTERVAL', 2000);
 		client.enableAudioVolumeIndicator();
 
 		client.on('volume-indicator', (volumes) => {
@@ -232,7 +231,9 @@ export function AgoraContextProvider({ children }: any) {
 		client.unpublish([localTracks.localAudioTrack, localTracks.localVideoTrack]);
 		client.leave();
 
-		leaveRtmChannel();
+		setUsers((previousUsers) => previousUsers.filter((u) => u.uid != UID));
+		await leaveRtmChannel();
+
 		navigate('/lobby');
 	};
 

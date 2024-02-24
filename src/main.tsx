@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
@@ -8,10 +8,10 @@ import { DevicesContextProvider } from './context/userContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	// <React.StrictMode>
-	<DevicesContextProvider>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</DevicesContextProvider>
+		<DevicesContextProvider>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</DevicesContextProvider>
 	// </React.StrictMode>
 );
