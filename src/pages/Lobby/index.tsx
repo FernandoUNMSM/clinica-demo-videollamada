@@ -5,10 +5,10 @@ import AgoraContext from '../../context/agoraContext';
 
 export const Lobby = () => {
 	const navigate = useNavigate();
-	const { initRtc } = useContext(AgoraContext);
+	const { initRtc, enterRoom } = useContext(AgoraContext);
 
-	const enterRoom = async () =>{
-		const connected = await initRtc()
+	const enterRoom2 = async () =>{
+		const connected = await enterRoom()
 		if(connected){
 			navigate('/videoRoom')
 		}
@@ -22,7 +22,7 @@ export const Lobby = () => {
 					<p>Enter your name to join the meeting</p>
 				</div>
 				<input />
-				<button onClick={enterRoom}>Join Room</button>
+				<button onClick={enterRoom2}>Join Room</button>
 			</div>
 		</LobbyPage>
 	);

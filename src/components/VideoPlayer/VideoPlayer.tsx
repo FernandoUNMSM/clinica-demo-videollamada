@@ -8,8 +8,8 @@ export const VideoPlayer = ({ user }: { user: User }) => {
 
 	return (
 		<>
-			<UserCameraOn cameraoff={user.isCameraOff} microphoneoff={user.isMicrophoneOff} isspeaking={user.isSpeaking}>
-				{!user.isMicrophoneOff ? (
+			<UserCameraOn microphoneoff={false} isspeaking={user.isSpeaking}>
+				{user.isMicrophoneOn ? (
 					<div id={`indicador_${user.uid}`} className="audio-detection">
 						<div className="bar"></div>
 						<div className="bar"></div>
@@ -20,11 +20,7 @@ export const VideoPlayer = ({ user }: { user: User }) => {
 						<BiSolidMicrophoneOff />
 					</MicrophoneOffIcon>
 				)}
-				{user.isHost ? (
-					<div ref={ref} id={`local`} className="videoPlayer"></div>
-				) : (
-					<div ref={ref} id={`video_${user.uid}`} className="videoPlayer"></div>
-				)}
+				<div ref={ref} id={`videoplayer_${user.uid}`} className="videoPlayer"></div>
 			</UserCameraOn>
 		</>
 	);

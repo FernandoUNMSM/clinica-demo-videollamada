@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const UserCameraOn = styled.div<{ cameraoff: boolean; microphoneoff: boolean; isspeaking: boolean }>`
+export const UserCameraOn = styled.div<{ microphoneoff: boolean; isspeaking: boolean }>`
 	position: relative;
   display: flex;
 	border-color: ${(props) => (props.microphoneoff ? '#FE4747' : props.isspeaking ? 'blue' : '#4CAF50')};

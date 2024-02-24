@@ -1,27 +1,29 @@
-import AgoraRTC from 'agora-rtc-sdk-ng';
-import { createContext, useState } from 'react';
+import AgoraRTC, { IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng';
+import { createContext, useEffect, useState } from 'react';
 import { User } from '../models/typeUser';
 import { useNavigate } from 'react-router-dom';
-// import { ILocalAudioTrack, ILocalVideoTrack } from 'agora-rtc-react';
+import AgoraRTM, { RtmChannel, RtmClient } from 'agora-rtm-react';
 
 const AgoraContext = createContext<any>({});
 
-const { VITE_AGORA_APP_ID, VITE_AGORA_CHANNEL, VITE_AGORA_TOKEN } = import.meta.env;
+const { VITE_AGORA_APP_ID, VITE_AGORA_CHANNEL } = import.meta.env;
 
 const client = AgoraRTC.createClient({
 	mode: 'rtc',
 	codec: 'vp8',
 });
 
-// interface Tracks {
-// 	localVideoTrack: ILocalVideoTrack | null,
-// 	localAudioTrack: ILocalAudioTrack | null
-// }
-
-const localTracks: any = {
+let localTracks: any = {
 	localVideoTrack: null,
 	localAudioTrack: null,
+	remoteVideoTracks: {},
+	remoteAudioTracks: {},
 };
+
+let rtmClient: RtmClient;
+let channel: RtmChannel;
+
+const UID = Math.floor(Math.random() * 2032);
 
 export function AgoraContextProvider({ children }: any) {
 	const [users, setUsers] = useState<User[]>([]);
@@ -31,6 +33,59 @@ export function AgoraContextProvider({ children }: any) {
 	const [microphone, setMicrophone] = useState(true);
 
 	const navigate = useNavigate();
+
+	const initRtm = async () => {
+		rtmClient = AgoraRTM.createInstance(VITE_AGORA_APP_ID);
+
+		await rtmClient.login({ uid: String(UID) });
+
+		channel = rtmClient.createChannel(VITE_AGORA_CHANNEL);
+		await channel.join();
+
+		await getChannelMembers();
+
+		channel.on('MemberJoined', handleMemberJoined);
+		channel.on('MemberLeft', handleMemberLeft);
+
+		window.addEventListener('beforeunload', leaveRtmChannel);
+	};
+
+	const enterRoom = async () => {
+		initRtc();
+
+		// let displayName = '';
+		initRtm();
+		return true;
+	};
+
+	const leaveRtmChannel = async () => {
+		await channel.leave();
+		await rtmClient.logout();
+	};
+
+	const handleMemberJoined = async (MemberId: string) => {
+		console.log('handleMemberJoined');
+
+		setUsers((prev) =>
+			prev.concat({
+				uid: MemberId,
+				isSpeaking: false,
+				isMicrophoneOn: false,
+			})
+		);
+	};
+
+	useEffect(() => {
+		console.log({ users });
+	}, [users]);
+
+	const handleMemberLeft = async (MemberId: string) => {
+		console.log('handleUserLeft');
+		setUsers((previousUsers) => {
+			console.log({ previousUsers });
+			return previousUsers.filter((u) => u.uid != MemberId);
+		});
+	};
 
 	const initVolumeIndicator = async () => {
 		AgoraRTC.setParameter('AUDIO_VOLUME_INDICATION_INTERVAL', 2000);
@@ -42,10 +97,10 @@ export function AgoraContextProvider({ children }: any) {
 					const item = document.getElementById(`indicador_${volume.uid}`);
 					if (volume.level >= 20) {
 						item?.classList.add('on');
-						changeUsers(volume, true, 'isSpeaking');
+						// changeUsers(volume, true, 'isSpeaking');
 					} else {
 						item?.classList.remove('on');
-						changeUsers(volume, false, 'isSpeaking');
+						// changeUsers(volume, false, 'isSpeaking');
 					}
 				} catch (error) {
 					console.error(error);
@@ -54,70 +109,66 @@ export function AgoraContextProvider({ children }: any) {
 		});
 	};
 
-	const handleUserJoined = async (user: User) => {
-		console.log({userJoined: user})
-		setUsers((previousUsers: User[]) => [
-			...previousUsers,
-			{
-				uid: user.uid,
-				isHost: false,
-				isCameraOff: true,
-				isSpeaking: false,
-				isMicrophoneOff: true,
-				videoTrack: user.videoTrack,
-				audioTrack: user.audioTrack,
-			},
-		]);
+	const getChannelMembers = async () => {
+		console.log('getChannelMembers');
+		const members = await channel.getMembers();
+
+		members.forEach((member: string) => {
+			setUsers((prev) =>
+				prev.concat({
+					uid: member,
+					isSpeaking: false,
+					isMicrophoneOn: false,
+				})
+			);
+		});
 	};
 
-	const handleUserPublished = async (user, mediaType) => {
+	const handleUserPublished = async (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') => {
+		console.log('handleUserPublished');
+
 		await client.subscribe(user, mediaType);
-		console.log({ user });
+
 		if (mediaType === 'video') {
-			const element = document.getElementById(`video_${user.uid}`);
-			user.videoTrack.play(element);
-			changeUsers(user, user['_video_muted_'], 'isCameraOff');
+			const videoPlayerElement: HTMLElement = document.getElementById(`videoplayer_${user.uid}`) || new HTMLElement();
+			user.videoTrack?.play(videoPlayerElement);
 		}
 
 		if (mediaType === 'audio') {
-			changeUsers(user, user['_audio_muted_'], 'isMicrophoneOff');
-			user.audioTrack.play();
+			changeUsers(user.uid, true);
+			user.audioTrack?.play();
 		}
 	};
 
-	const handleUserUnPublished = async (user, mediaType) => {
-		if (mediaType === 'video') {
-			changeUsers(user, true, 'isCameraOff');
-		}
+	const handleUserUnPublished = async (user: IAgoraRTCRemoteUser, mediaType: string) => {
+		console.log('handleUserUnPublished');
 		if (mediaType === 'audio') {
-			changeUsers(user, user['_audio_muted_'], 'isMicrophoneOff');
+			changeUsers(user.uid, false);
 		}
 	};
 
-	const changeUsers = (item: any, value: string | number | boolean, keyword: string) => {
+	const changeUsers = async (compareTo: string | number, value: boolean) => {
 		setUsers((previousUsers) =>
 			previousUsers.map((u: User) => {
-				if (u.uid === item.uid) {
-					u[keyword] = value;
+				if (u.uid == compareTo) {
+					u.isMicrophoneOn = value;
 				}
 				return u;
 			})
 		);
 	};
 
-	const handleUserLeft = async (user) => {
+	const handleUserLeft = async (user: IAgoraRTCRemoteUser) => {
 		console.log('handleUserLeft');
-		console.log({ aa: users.filter((u) => u.uid != user.uid) });
 		setUsers((previousUsers) => previousUsers.filter((u) => u.uid != user.uid));
 	};
 
 	const initRtc = async () => {
-		client.on('user-joined', handleUserJoined);
 		client.on('user-published', handleUserPublished);
 		client.on('user-unpublished', handleUserUnPublished);
 		client.on('user-left', handleUserLeft);
 
-		const uid = await client.join(VITE_AGORA_APP_ID, VITE_AGORA_CHANNEL, VITE_AGORA_TOKEN, null);
+		await client.join(VITE_AGORA_APP_ID, VITE_AGORA_CHANNEL, null, UID);
 
 		localTracks.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
 		localTracks.localAudioTrack.setMuted(micMuted);
@@ -128,46 +179,28 @@ export function AgoraContextProvider({ children }: any) {
 		});
 		localTracks.localVideoTrack.setMuted(cameraOff);
 
-		setUsers((previousUsers: User[]) => [
-			...previousUsers,
-			{
-				uid,
-				isHost: true,
-				isMicrophoneOff: true,
-				isCameraOff: false,
-				isSpeaking: false,
-				videoTrack: localTracks.localVideoTrack,
-				audioTrack: localTracks.localAudioTrack,
-			},
-		]);
-		client.publish([localTracks.localAudioTrack, localTracks.localVideoTrack]);
+		await client.publish([localTracks.localAudioTrack, localTracks.localVideoTrack]);
 
 		initVolumeIndicator();
-		return true;
 	};
 
 	const changeCamera = async (deviceId: string) => {
 		localTracks.localVideoTrack.stop();
 		localTracks.localVideoTrack.close();
+
 		client.unpublish([localTracks.localVideoTrack]);
 
 		localTracks.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
 			cameraId: deviceId,
 			encoderConfig: { width: { max: 1280, min: 720 }, height: { max: 1280, min: 720 } },
 		});
-		if (!cameraOff) {
-			localTracks.localVideoTrack.play('local');
-		}
-		client.publish([localTracks.localVideoTrack]);
 
-		setUsers((previousUsers) =>
-			previousUsers.map((u) => {
-				if (u.isHost) {
-					u.videoTrack = localTracks.localVideoTrack;
-				}
-				return u;
-			})
-		);
+		if (!cameraOff) {
+			const videoPlayerElement = document.getElementById(`videoplayer_${UID}`);
+			localTracks.localVideoTrack.play(videoPlayerElement);
+		}
+
+		client.publish([localTracks.localVideoTrack]);
 	};
 
 	const leaveRoom = async () => {
@@ -177,10 +210,20 @@ export function AgoraContextProvider({ children }: any) {
 			localTracks.localVideoTrack.stop();
 			localTracks.localVideoTrack.close();
 		}
-		setUsers((previousUsers) => previousUsers.filter((u) => !u.isHost));
+
 		client.unpublish([localTracks.localAudioTrack, localTracks.localVideoTrack]);
 		client.leave();
+
+		leaveRtmChannel();
 		navigate('/lobby');
+	};
+
+	const toggleMic = async () => {
+		changeUsers(UID, micMuted);
+		setMicMuted(!micMuted);
+
+		localTracks.localAudioTrack.setMuted(!micMuted);
+		client.publish(localTracks.localAudioTrack);
 	};
 
 	return (
@@ -191,17 +234,18 @@ export function AgoraContextProvider({ children }: any) {
 				client,
 				initRtc,
 				localTracks,
-				// setLocalTracks,
 				cameraOff,
 				setCameraOff,
 				micMuted,
-				setMicMuted,
 				camera,
 				setCamera,
 				microphone,
 				setMicrophone,
 				leaveRoom,
 				changeCamera,
+				enterRoom,
+				UID,
+				toggleMic,
 			}}
 		>
 			{children}

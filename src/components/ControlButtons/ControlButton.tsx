@@ -14,27 +14,18 @@ export const ControlButtons = ({ setModal }: Props) => {
 		localTracks,
 		client,
 		micMuted,
-		setMicMuted,
 		cameraOff,
 		setCameraOff,
 		leaveRoom,
+		UID,
+		toggleMic
 	} = useContext(AgoraContext);
-
-
-	const toggleMic = async () => {
-		if (micMuted) {
-			setMicMuted(false);
-		} else {
-			setMicMuted(true);
-		}
-		localTracks.localAudioTrack.setMuted(!micMuted);
-		client.publish(localTracks.localAudioTrack);
-	};
 
 	const toggleCamera = async () => {
 		if (cameraOff) {
 			setCameraOff(false);
-			localTracks.localVideoTrack.play('local');
+			const videoPlayerElement = document.getElementById(`videoplayer_${UID}`);
+			localTracks.localVideoTrack.play(videoPlayerElement);
 		} else {
 			setCameraOff(true);
 			localTracks.localVideoTrack.stop();

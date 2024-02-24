@@ -8,11 +8,12 @@ interface Props {
 }
 
 const DevicesTab = ({ devices, typeDevice }: Props) => {
-	const { camera, microphone, setCamera, setMicrophone } = useContext(AgoraContext);
+	const { camera, microphone, setCamera, setMicrophone, changeCamera } = useContext(AgoraContext);
 	const [actualDevice, setActualDevice] = useState<MediaDeviceInfo>(typeDevice === 'camera' ? camera : microphone);
 
 	useEffect(() => {
 		if (typeDevice === 'camera') {
+			changeCamera(actualDevice.deviceId);
 			setCamera(actualDevice);
 		} else {
 			setMicrophone(actualDevice);
