@@ -1,4 +1,3 @@
-/* @import 'node_modules/modern-normalize/modern-normalize.css'; */
 
 *{
   font-family: "Fredoka", sans-serif;
@@ -9,58 +8,4 @@
 #root{
   height: 100vh;
   width: 100vw;
-}
-.gridResponive{
-  /* display: flex;
-  justify-content: center;
-  flex-wrap: wrap;; */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
-  gap: 20px;
-  padding: 30px 40px;
-  padding-bottom: 0px;
-  height: 100%;
-}
-
-.audio-detection {
-  display: flex;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  z-index: 10;
-  background-color: #fff;
-  padding: 8px;
-  border-radius: 100px;
-  right: 20px;
-  top: 20px;
-}
-
-.audio-detection .bar{
-  width: 8px;
-  border-radius: 3px;
-  height: 10px;
-  margin: 0 2px;
-  background-color: #4CAF50;
-}
-
-.audio-detection.on .bar:nth-child(even) {
-  animation: soundwave 1s alternate infinite ease-in-out;
-}
-
-
-.audio-detection.on .bar {
-  animation: soundwave 1.2s alternate infinite ease-in-out;
-}
-
-@keyframes soundwave {
-  0% {
-    height: 10px;
-  }
-  50% {
-    height: 21px;
-  }
-  100% {
-    height: 17px;
-  }
 }

@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 const animationTop = keyframes`
   0% {
     transform: translateY(-100px);
@@ -22,7 +22,6 @@ const animationLeft = keyframes`
     opacity: 1;
   }
 `;
-
 
 const animationBottom = keyframes`
   0% {
@@ -65,43 +64,79 @@ export const LobbyPage = styled.div`
 	}
 	h1 {
 		font-size: 3em;
-    animation: ${animationTop} 1.5s ease;
+		animation: ${animationTop} 1.5s ease;
 	}
-	p {
-		font-size: 2em;
-    animation: ${animationLeft} 1.5s ease;
+	.title {
+		margin-bottom: 20px;
+		p {
+			font-size: 2em;
+			animation: ${animationLeft} 1.5s ease;
+		}
 	}
-  .title {
-    margin-bottom: 20px;
-  }
-  input{
-		height: 60px;
-    width: 80%;
-    background-color: #222226;
-    outline: none;
-    padding: 0 10px;
-    font-size: 1.5em;
-    text-align: center;
-    margin-bottom: 20px;
-    animation: ${inputAnimation} 2s ease;
-    border: none;
-    color: white;
-  }
-	button {
-		color: black;
-		background-color: #fff;
-		width: 50%;
-		height: 40px;
-		border-radius: 7px;
-		margin-top: 10px;
-    max-width: 300px;
-    transition: .3s;
-    animation: ${animationBottom} 2s ease;
+	form {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		input {
+			height: 60px;
+			width: 80%;
+			background-color: #222226;
+			outline: none;
+			padding: 0 10px;
+			font-size: 1.5em;
+			text-align: center;
+			margin-bottom: 20px;
+			animation: ${inputAnimation} 2s ease;
+			border: none;
+			color: white;
+			&:disabled {
+				cursor: not-allowed;
+				user-select: none;
+			}
+		}
 	}
-	.title h1, .title p{
+	.title h1,
+	.title p {
 		font-family: 'Lato', sans-serif !important;
 	}
+`;
 
+export const JoinButton = styled.button<{ charging: boolean }>`
+	color: black;
+	background-color: #222226;
+	animation: ${animationBottom} 2s ease;
+	width: 50%;
+	height: 50px;
+	border-radius: 7px;
+	margin-top: 10px;
+	max-width: 300px;
+	transition: 0.3s;
+	border: none;
+	cursor: pointer;
+	user-select: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
+	p {
+		color: #fff;
+		font-size: 1.1em;
+		margin-right: 20px;
+	}
+	&:hover {
+		background-color: #17171a;
+	}
 
+	${(props) => {
+		if (props.charging) {
+			return css`
+				background-color: #17171a;
+				opacity: 0.6;
+				cursor: not-allowed;
+				pointer-events: none;
+			`;
+		}
+	}}
 `;

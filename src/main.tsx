@@ -4,14 +4,14 @@ import App from './App.tsx';
 import './index.css';
 
 import { BrowserRouter } from 'react-router-dom';
-import { DevicesContextProvider } from './context/userContext.tsx';
+import { ThemeControlContextProvider } from './context/themeContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	// <React.StrictMode>
-		<DevicesContextProvider>
+		<ThemeControlContextProvider>
 			<BrowserRouter>
 				<App />
 			</BrowserRouter>
-		</DevicesContextProvider>
+		</ThemeControlContextProvider>
 	// </React.StrictMode>
 );

@@ -15,9 +15,7 @@ const client = AgoraRTC.createClient({
 
 let localTracks: any = {
 	localVideoTrack: null,
-	localAudioTrack: null,
-	remoteVideoTracks: {},
-	remoteAudioTracks: {},
+	localAudioTrack: null
 };
 
 let rtmClient: RtmClient;
@@ -25,11 +23,11 @@ let channel: RtmChannel;
 
 const UID = Math.floor(Math.random() * 2032);
 
-export function AgoraContextProvider({ children }: any) {
+export function AgoraContextProvider({ children }: { children: React.ReactNode }) {
 	const [users, setUsers] = useState<User[]>([]);
 	const [micMuted, setMicMuted] = useState(true);
 	const [cameraOff, setCameraOff] = useState(true);
-	const [camera, setCamera] = useState({});
+	const [camera, setCamera] = useState<MediaDeviceInfo | null>(null);
 	const [microphone, setMicrophone] = useState({});
 
 	const navigate = useNavigate();
@@ -81,7 +79,6 @@ export function AgoraContextProvider({ children }: any) {
 	const handleMemberLeft = async (MemberId: string) => {
 		console.log('handleUserLeft');
 		setUsers((previousUsers) => {
-			console.log({ previousUsers });
 			return previousUsers.filter((u) => u.uid != MemberId);
 		});
 	};
@@ -110,7 +107,6 @@ export function AgoraContextProvider({ children }: any) {
 		const members = await channel.getMembers();
 
 		members.forEach(async (member: string) => {
-			console.log({member});
 			const { name } = await rtmClient.getUserAttributesByKeys(member, ['name']);
 			setUsers((prev) =>
 				prev.concat({
@@ -175,12 +171,7 @@ export function AgoraContextProvider({ children }: any) {
 		localTracks.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
 		localTracks.localAudioTrack.setMuted(micMuted);
 
-		localTracks.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
-			encoderConfig: { width: { max: 1280, min: 720 }, height: { max: 1280, min: 720 } },
-		});
-		localTracks.localVideoTrack.setMuted(cameraOff);
-
-		await client.publish([localTracks.localAudioTrack, localTracks.localVideoTrack]);
+		await client.publish(localTracks.localAudioTrack);
 
 		initVolumeIndicator();
 	};
@@ -211,7 +202,7 @@ export function AgoraContextProvider({ children }: any) {
 		client.unpublish([localTracks.localAudioTrack]);
 
 		localTracks.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack({
-			microphoneId: deviceId
+			microphoneId: deviceId,
 		});
 
 		if (!micMuted) {
@@ -233,10 +224,10 @@ export function AgoraContextProvider({ children }: any) {
 		client.leave();
 
 		setUsers([]);
-		setMicMuted(true)
-		setCameraOff(true)
-		setCamera({})
-		setMicrophone({})
+		setMicMuted(true);
+		setCameraOff(true);
+		setCamera(null);
+		setMicrophone({});
 		await leaveRtmChannel();
 
 		navigate('/lobby');
@@ -268,7 +259,7 @@ export function AgoraContextProvider({ children }: any) {
 				changeMicrophone,
 				enterRoom,
 				UID,
-				toggleMic
+				toggleMic,
 			}}
 		>
 			{children}

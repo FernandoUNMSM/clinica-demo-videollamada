@@ -1,6 +1,6 @@
 import './App.css';
 import { VideoRoom } from './pages/VideoRoom/VideoRoom';
-import DevicesContext from './context/userContext';
+import DevicesContext from './context/themeContext';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Lobby } from './pages/Lobby';
 import { ThemeProvider } from 'styled-components';

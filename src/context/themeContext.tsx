@@ -2,25 +2,24 @@ import { useState, createContext, Dispatch, SetStateAction } from 'react';
 import { Theme } from '../models/typeUser';
 import { themes } from '../styles/themes';
 
-interface Devices {
+interface ThemeControl {
 	themeSelected: Theme;
 	setThemeSelected: Dispatch<SetStateAction<Theme>>;
 }
 
-const DevicesContext = createContext<Devices>({
+const ThemeControlContext = createContext<ThemeControl>({
 	themeSelected: themes.blue,
 	setThemeSelected: () => {}
 });
 
-export function DevicesContextProvider({ children }: any) {
+export function ThemeControlContextProvider({ children }: {children: React.ReactNode}) {
 	const [themeSelected, setThemeSelected] = useState<Theme>(themes.sakura);
 
-
 	return (
-		<DevicesContext.Provider value={{ themeSelected, setThemeSelected }}>
+		<ThemeControlContext.Provider value={{ themeSelected, setThemeSelected }}>
 			{children}
-		</DevicesContext.Provider>
+		</ThemeControlContext.Provider>
 	);
 }
 
-export default DevicesContext;
+export default ThemeControlContext;

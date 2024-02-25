@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ThemeIconContainer } from './styles';
-import DevicesContext from '../../context/userContext';
+import DevicesContext from '../../context/themeContext';
 import { Theme } from '../../models/typeUser';
 
 interface Props {

@@ -1,4 +1,4 @@
-import DevicesContext from '../../../context/userContext';
+import DevicesContext from '../../../context/themeContext';
 import { themes } from '../../../styles/themes';
 import { ThemeIcon } from '../../ThemeIcon/themeIcon';
 import { ThemeContainer, ThemeIconGroup, ThemeIconGroupContent, ThemeIconGroupTitle } from './styles';
