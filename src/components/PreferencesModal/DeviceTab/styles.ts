@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 
-export const DevicesList = styled.div``;
+export const DevicesList = styled.div`
+`;
 
-export const Device = styled.div<{ isActive: boolean }>`
+export const Device = styled.div<{ isActive: boolean, disabled: boolean }>`
 	min-height: 40px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 5px 10px;
-	cursor: pointer;
+	cursor: ${(props) => props.disabled ? 'wait' : 'pointer'};
 	user-select: none;
 	color: ${(props) => (props.isActive ? props.theme.preferenceModal.optionActive.color : 'rgb(94, 98, 120)')};
 	background-color: ${(props) => (props.isActive ? props.theme.preferenceModal.optionActive.background : 'transparent')};

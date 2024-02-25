@@ -3,8 +3,8 @@ import { createContext, useState } from 'react';
 import { User } from '../models/typeUser';
 import { useNavigate } from 'react-router-dom';
 import AgoraRTM, { RtmChannel, RtmClient } from 'agora-rtm-react';
-import audio from '../assets/oh-my-god-meme.mp3'
-import audioSlap from '../assets/slap-sound-effect-free.mp3'
+import joinCallAudio from '../assets/join_call.mp3';
+import leaveCallAudio from '../assets/leave_call.mp3';
 
 const AgoraContext = createContext<any>({});
 
@@ -15,9 +15,10 @@ const client = AgoraRTC.createClient({
 	codec: 'vp8',
 });
 
+
 let localTracks: any = {
 	localVideoTrack: null,
-	localAudioTrack: null
+	localAudioTrack: null,
 };
 
 let rtmClient: RtmClient;
@@ -46,9 +47,6 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 		await getChannelMembers();
 
-		const audio2 = new Audio(audio);
-		audio2.play();
-
 		channel.on('MemberJoined', handleMemberJoined);
 		channel.on('MemberLeft', handleMemberLeft);
 
@@ -59,6 +57,9 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 		await initRtm(name);
 		await initRtc();
 
+		const audio = new Audio(joinCallAudio);
+		audio.play();
+
 		return true;
 	};
 
@@ -68,10 +69,11 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	};
 
 	const handleMemberJoined = async (MemberId: string) => {
-		console.log('handleMemberJoined');
 		const { name } = await rtmClient.getUserAttributesByKeys(MemberId, ['name']);
-		const audio2 = new Audio(audio);
-		audio2.play();
+
+		const audio = new Audio(joinCallAudio);
+		audio.play();
+
 		setUsers((prev) =>
 			prev.concat({
 				uid: MemberId,
@@ -83,11 +85,6 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	};
 
 	const handleMemberLeft = async (MemberId: string) => {
-		console.log('handleUserLeft');
-
-		// const audio2 = new Audio(audioSlap);
-		// audio2.play();
-
 		setUsers((previousUsers) => {
 			return previousUsers.filter((u) => u.uid != MemberId);
 		});
@@ -113,7 +110,6 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	};
 
 	const getChannelMembers = async () => {
-		console.log('getChannelMembers');
 		const members = await channel.getMembers();
 
 		members.forEach(async (member: string) => {
@@ -130,14 +126,11 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	};
 
 	const handleUserPublished = async (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') => {
-		console.log('handleUserPublished');
-
 		await client.subscribe(user, mediaType);
 
 		if (mediaType === 'video') {
 			setTimeout(() => {
 				const videoPlayerElement: HTMLElement = document.getElementById(`videoplayer_${user.uid}`) || new HTMLElement();
-				console.log({ user, videoPlayerElement });
 				user.videoTrack?.play(videoPlayerElement);
 			}, 1500);
 		}
@@ -149,7 +142,6 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	};
 
 	const handleUserUnPublished = async (user: IAgoraRTCRemoteUser, mediaType: string) => {
-		console.log('handleUserUnPublished');
 		if (mediaType === 'audio') {
 			changeUsers(user.uid, false);
 		}
@@ -167,7 +159,6 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	};
 
 	const handleUserLeft = async (user: IAgoraRTCRemoteUser) => {
-		console.log('handleUserLeft');
 		setUsers((previousUsers) => previousUsers.filter((u) => u.uid != user.uid));
 	};
 
@@ -203,6 +194,7 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 		}
 
 		client.publish([localTracks.localVideoTrack]);
+		return true
 	};
 
 	const changeMicrophone = async (deviceId: string) => {
@@ -224,7 +216,7 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 	const leaveRoom = async () => {
 		if (localTracks.localVideoTrack || localTracks.localAudioTrack) {
-			if(!cameraOff){
+			if (!cameraOff) {
 				localTracks.localVideoTrack.stop();
 				localTracks.localVideoTrack.close();
 				client.unpublish(localTracks.localVideoTrack);
@@ -235,8 +227,10 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 		client.unpublish(localTracks.localAudioTrack);
 		client.leave();
-		const audio2 = new Audio(audioSlap);
-		audio2.play();
+
+		const audio = new Audio(leaveCallAudio);
+		audio.play();
+
 		setUsers([]);
 		setMicMuted(true);
 		setCameraOff(true);
@@ -274,7 +268,7 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 				changeMicrophone,
 				enterRoom,
 				UID,
-				toggleMic,
+				toggleMic
 			}}
 		>
 			{children}

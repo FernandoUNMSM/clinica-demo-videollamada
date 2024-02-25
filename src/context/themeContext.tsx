@@ -13,7 +13,7 @@ const ThemeControlContext = createContext<ThemeControl>({
 });
 
 export function ThemeControlContextProvider({ children }: {children: React.ReactNode}) {
-	const [themeSelected, setThemeSelected] = useState<Theme>(themes.sakura);
+	const [themeSelected, setThemeSelected] = useState<Theme>(themes.dark);
 
 	return (
 		<ThemeControlContext.Provider value={{ themeSelected, setThemeSelected }}>

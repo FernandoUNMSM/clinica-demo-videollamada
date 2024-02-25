@@ -16,7 +16,7 @@ export const Lobby = () => {
 			.getUserMedia({ audio: true })
 			.then(async function () {
 				setCharging(true);
-				const connected = await enterRoom(username);
+				const connected = await enterRoom(username.trimEnd());
 				if (connected) {
 					navigate('/videoRoom');
 				}
@@ -37,7 +37,7 @@ export const Lobby = () => {
 					<p>Enter your name to join the meeting</p>
 				</div>
 				<form onSubmit={callEnterRoom}>
-					<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={40} required disabled={charging}/>
+					<input type="text" value={username} onChange={(e) => setUsername(e.target.value.trimStart())} maxLength={40} required disabled={charging}/>
 					<JoinButton charging={charging}>
 						<p>Join Room</p>
 						{charging && <SpinLoader />}

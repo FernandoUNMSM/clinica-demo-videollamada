@@ -29,8 +29,8 @@ export const CircleButton = styled.button<{ deviceOff?: boolean, disabled?: bool
 		if(props.disabled){
 			return css`
 				pointer-events: none;
-				opacity: .3;
-				cursor: not-allowed;
+				/* opacity: .3; */
+				/* cursor: not-allowed; */
 			`
 		}
 	}}

@@ -16,7 +16,6 @@ export const VideoRoom = () => {
 	useEffect(() => {
 		if(!rtmClient) {
 			navigate('/lobby');
-
 		}
 	}, []);
 
