@@ -3,6 +3,8 @@ import { createContext, useState } from 'react';
 import { User } from '../models/typeUser';
 import { useNavigate } from 'react-router-dom';
 import AgoraRTM, { RtmChannel, RtmClient } from 'agora-rtm-react';
+import audio from '../assets/oh-my-god-meme.mp3'
+import audioSlap from '../assets/slap-sound-effect-free.mp3'
 
 const AgoraContext = createContext<any>({});
 
@@ -44,6 +46,9 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 		await getChannelMembers();
 
+		const audio2 = new Audio(audio);
+		audio2.play();
+
 		channel.on('MemberJoined', handleMemberJoined);
 		channel.on('MemberLeft', handleMemberLeft);
 
@@ -65,7 +70,8 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	const handleMemberJoined = async (MemberId: string) => {
 		console.log('handleMemberJoined');
 		const { name } = await rtmClient.getUserAttributesByKeys(MemberId, ['name']);
-
+		const audio2 = new Audio(audio);
+		audio2.play();
 		setUsers((prev) =>
 			prev.concat({
 				uid: MemberId,
@@ -78,6 +84,10 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 	const handleMemberLeft = async (MemberId: string) => {
 		console.log('handleUserLeft');
+
+		// const audio2 = new Audio(audioSlap);
+		// audio2.play();
+
 		setUsers((previousUsers) => {
 			return previousUsers.filter((u) => u.uid != MemberId);
 		});
@@ -214,15 +224,19 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 	const leaveRoom = async () => {
 		if (localTracks.localVideoTrack || localTracks.localAudioTrack) {
+			if(!cameraOff){
+				localTracks.localVideoTrack.stop();
+				localTracks.localVideoTrack.close();
+				client.unpublish(localTracks.localVideoTrack);
+			}
 			localTracks.localAudioTrack.stop();
 			localTracks.localAudioTrack.close();
-			localTracks.localVideoTrack.stop();
-			localTracks.localVideoTrack.close();
 		}
 
-		client.unpublish([localTracks.localAudioTrack, localTracks.localVideoTrack]);
+		client.unpublish(localTracks.localAudioTrack);
 		client.leave();
-
+		const audio2 = new Audio(audioSlap);
+		audio2.play();
 		setUsers([]);
 		setMicMuted(true);
 		setCameraOff(true);
