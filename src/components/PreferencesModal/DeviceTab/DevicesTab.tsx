@@ -19,7 +19,7 @@ const DevicesTab = ({ devices, typeDevice }: Props) => {
 			await changeCamera(device.deviceId);
 			setCamera(device);
 		} else {
-			await changeMicrophone(device.deviceId);
+			changeMicrophone(device.deviceId);
 			setMicrophone(device);
 		}
 		setDisabled(false);
