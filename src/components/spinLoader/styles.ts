@@ -17,6 +17,7 @@ export const SpinContainer = styled.div`
     border: 2px solid #ccc;
     border-top-color: transparent;
     animation: ${animation} 1s infinite linear;
+    margin-left: 20px;
   }
 `
 

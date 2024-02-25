@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Theme } from '../../models/typeUser';
+import { bps } from '../../styles/breakpoints';
 
 export const ThemeIconContainer = styled.div<{ localTheme: Theme }>`
 	cursor: pointer;
@@ -23,4 +24,8 @@ export const ThemeIconContainer = styled.div<{ localTheme: Theme }>`
 	&:hover{
 		opacity: .8;
 	}
+	${bps.tablet} {
+		svg{width: 100%}
+	}
+
 `;

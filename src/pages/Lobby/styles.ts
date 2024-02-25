@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import { bps } from '../../styles/breakpoints';
 const animationTop = keyframes`
   0% {
     transform: translateY(-100px);
@@ -101,6 +102,23 @@ export const LobbyPage = styled.div`
 	.title p {
 		font-family: 'Lato', sans-serif !important;
 	}
+
+	${bps.mobile} {
+		.content {
+			width: 90%;
+			.title {
+				h1 {
+					font-size: 2em;
+				}
+				p {
+					font-size: 1.5em;
+				}
+			}
+		}
+		form input{
+			width: 90%;
+		}
+	}
 `;
 
 export const JoinButton = styled.button<{ charging: boolean }>`
@@ -123,7 +141,6 @@ export const JoinButton = styled.button<{ charging: boolean }>`
 	p {
 		color: #fff;
 		font-size: 1.1em;
-		margin-right: 20px;
 	}
 	&:hover {
 		background-color: #17171a;

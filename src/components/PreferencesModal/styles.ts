@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components';
+import { bps } from '../../styles/breakpoints';
 const animationOpenContainer = keyframes`
   0% {
     opacity: 0;
@@ -33,6 +34,7 @@ const animationOpen = keyframes`
 `;
 
 export const ModalContainer = styled.div`
+	margin: 0 20px;
 	width: 810px;
 	height: 500px;
 	max-height: 90%;
@@ -76,6 +78,9 @@ export const ModalContent = styled.div`
 		display: flex;
 		flex-direction: column;
 	}
+	${bps.tablet850} {
+		grid-template-columns: auto 1fr;
+	}
 `;
 
 export const PreferencesOptionsContainer = styled.div`
@@ -104,6 +109,14 @@ export const PreferencesOption = styled.div<{ isActive: boolean }>`
 	p {
 		margin-left: 10px;
 	}
+	${bps.tablet850} {
+		p{
+			display: none;
+		}
+		svg{
+			margin-right: 10px;
+		}
+	}
 `;
 
 export const PreferenceSection = styled.div`
@@ -121,5 +134,8 @@ export const PreferenceSection = styled.div`
 		background-color: rgba(155, 155, 155, 0.5);
 		border-radius: 20px;
 		border: transparent;
+	}
+	${bps.tablet850} {
+		padding: 10px;
 	}
 `;

@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { bps } from "../../styles/breakpoints";
 
 export const ControlButtonsContainer = styled.div`
 	display: flex;
@@ -6,6 +7,9 @@ export const ControlButtonsContainer = styled.div`
 	height: 100%;
 	justify-content: space-evenly;
 	align-items: center;
+	${bps.mobile} {
+		width: 100%;
+	}
 `;
 
 export const CircleButton = styled.button<{ deviceOff?: boolean, disabled?: boolean }>`

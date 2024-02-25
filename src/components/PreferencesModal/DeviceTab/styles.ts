@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { bps } from '../../../styles/breakpoints';
 
 export const DevicesList = styled.div`
 `;
@@ -20,5 +21,8 @@ export const Device = styled.div<{ isActive: boolean, disabled: boolean }>`
 
 	p {
 		align-self: center;
+	}
+	${bps.mobile} {
+		padding: 0 0 0 10px;
 	}
 `;

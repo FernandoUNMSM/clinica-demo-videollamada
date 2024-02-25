@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { bps } from '../../../styles/breakpoints';
 
 export const ThemeContainer = styled.div`
 	display: flex;
@@ -27,5 +28,8 @@ export const ThemeIconGroupContent = styled.div`
 		&:hover{
 			opacity: .8;
 		}
+	}
+	${bps.tablet} {
+		justify-content: center;
 	}
 `;
