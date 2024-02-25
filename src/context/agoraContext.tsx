@@ -30,7 +30,7 @@ export function AgoraContextProvider({ children }: any) {
 	const [micMuted, setMicMuted] = useState(true);
 	const [cameraOff, setCameraOff] = useState(true);
 	const [camera, setCamera] = useState({});
-	const [microphone, setMicrophone] = useState(true);
+	const [microphone, setMicrophone] = useState({});
 
 	const navigate = useNavigate();
 
@@ -110,6 +110,7 @@ export function AgoraContextProvider({ children }: any) {
 		const members = await channel.getMembers();
 
 		members.forEach(async (member: string) => {
+			console.log({member});
 			const { name } = await rtmClient.getUserAttributesByKeys(member, ['name']);
 			setUsers((prev) =>
 				prev.concat({
@@ -231,7 +232,11 @@ export function AgoraContextProvider({ children }: any) {
 		client.unpublish([localTracks.localAudioTrack, localTracks.localVideoTrack]);
 		client.leave();
 
-		setUsers((previousUsers) => previousUsers.filter((u) => u.uid != UID));
+		setUsers([]);
+		setMicMuted(true)
+		setCameraOff(true)
+		setCamera({})
+		setMicrophone({})
 		await leaveRtmChannel();
 
 		navigate('/lobby');
