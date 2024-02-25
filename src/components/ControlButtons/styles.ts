@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const ControlButtonsContainer = styled.div`
 	display: flex;
@@ -8,7 +8,7 @@ export const ControlButtonsContainer = styled.div`
 	align-items: center;
 `;
 
-export const CircleButton = styled.button<{ deviceOff?: boolean }>`
+export const CircleButton = styled.button<{ deviceOff?: boolean, disabled?: boolean }>`
 	height: 60px;
 	width: 60px;
 	display: flex;
@@ -24,6 +24,16 @@ export const CircleButton = styled.button<{ deviceOff?: boolean }>`
 	}
 	font-size: 20px;
 	color: white;
+
+	${(props)=>{
+		if(props.disabled){
+			return css`
+				pointer-events: none;
+				opacity: .3;
+				cursor: not-allowed;
+			`
+		}
+	}}
 `;
 
 export const LeaveButton = styled(CircleButton)`

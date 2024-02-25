@@ -247,6 +247,7 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 				users,
 				client,
 				localTracks,
+				rtmClient,
 				cameraOff,
 				setCameraOff,
 				micMuted,

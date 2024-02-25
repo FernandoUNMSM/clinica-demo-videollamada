@@ -5,15 +5,18 @@ import PreferencesModal from '../../components/PreferencesModal/PreferencesModal
 import { GridCamerasOn } from '../../components/GridCamerasOn';
 import AgoraContext from '../../context/agoraContext';
 import { ControlButtons } from '../../components/ControlButtons/ControlButton';
+import { useNavigate } from 'react-router-dom';
 
 export const VideoRoom = () => {
-	const { users, leaveRoom } = useContext(AgoraContext);
+	const { users, rtmClient } = useContext(AgoraContext);
 
 	const [modal, setModal] = useState<boolean>(false);
 
+	const navigate = useNavigate();
 	useEffect(() => {
-		return () => {
-			leaveRoom()
+		if(!rtmClient) {
+			navigate('/lobby');
+
 		}
 	}, []);
 

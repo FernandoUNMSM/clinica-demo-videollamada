@@ -2,7 +2,7 @@ import { BiSolidCamera, BiSolidCameraOff, BiSolidMicrophone, BiSolidMicrophoneOf
 import { CircleButton, ControlButtonsContainer, LeaveButton } from './styles';
 import { ImPhoneHangUp } from 'react-icons/im';
 import { FaGear } from 'react-icons/fa6';
-import { Dispatch, SetStateAction, useContext } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import AgoraContext from '../../context/agoraContext';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { CameraVideoTrackInitConfig } from 'agora-rtc-react';
@@ -13,8 +13,10 @@ interface Props {
 
 export const ControlButtons = ({ setModal }: Props) => {
 	const { localTracks, client, micMuted, cameraOff, setCameraOff, leaveRoom, UID, toggleMic, camera } = useContext(AgoraContext);
+	const [disabled, setDisabled] = useState(false)
 
 	const toggleCamera = async () => {
+		setDisabled(true)
 		if (cameraOff) {
 			setCameraOff(false);
 
@@ -31,15 +33,17 @@ export const ControlButtons = ({ setModal }: Props) => {
 			const videoPlayerElement = document.getElementById(`videoplayer_${UID}`);
 
 			localTracks.localVideoTrack.play(videoPlayerElement);
+			client.publish(localTracks.localVideoTrack);
 		} else {
 			setCameraOff(true);
 
 			localTracks.localVideoTrack.stop();
 			localTracks.localVideoTrack.close();
+			client.unpublish([localTracks.localVideoTrack]);
 		}
 
-		localTracks.localVideoTrack.setMuted(!cameraOff);
-		client.publish(localTracks.localVideoTrack);
+		// localTracks.localVideoTrack.setMuted(!cameraOff);
+		setDisabled(false)
 	};
 
 	return (
@@ -49,7 +53,7 @@ export const ControlButtons = ({ setModal }: Props) => {
 					<CircleButton onClick={toggleMic} deviceOff={micMuted}>
 						{micMuted ? <BiSolidMicrophoneOff /> : <BiSolidMicrophone />}
 					</CircleButton>
-					<CircleButton onClick={toggleCamera} deviceOff={cameraOff}>
+					<CircleButton onClick={toggleCamera} deviceOff={cameraOff} disabled={disabled}>
 						{cameraOff ? <BiSolidCameraOff /> : <BiSolidCamera />}
 					</CircleButton>
 					<LeaveButton onClick={leaveRoom}>
