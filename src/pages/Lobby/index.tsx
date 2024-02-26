@@ -33,7 +33,7 @@ export const Lobby = () => {
 		<LobbyPage>
 			<div className="content">
 				<div className="title">
-					<h1>Video Call - Demo Clinica Internacional</h1>
+					<h1>Video Call - Demo Clínica Internacional</h1>
 					<p>Enter your name to join the meeting</p>
 				</div>
 				<form onSubmit={callEnterRoom}>

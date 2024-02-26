@@ -129,10 +129,8 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 		if (mediaType === 'video') {
 			setTimeout(() => {
-				// if(!cameraOff){
 				const videoPlayerElement: HTMLElement = document.getElementById(`videoplayer_${user.uid}`) || new HTMLElement();
 				user.videoTrack?.play(videoPlayerElement);
-				// }
 			}, 1500);
 		}
 
