@@ -139,6 +139,11 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 			user.audioTrack?.play();
 		}
 	};
+	const handleUserUnPublished = async (user: IAgoraRTCRemoteUser, mediaType: string) => {
+		if (mediaType === 'audio') {
+			changeUsers(user.uid, false);
+		}
+	};
 
 	const changeUsers = async (compareTo: string | number, value: boolean) => {
 		setUsers((previousUsers) =>
@@ -157,6 +162,7 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 	const initRtc = async () => {
 		client.on('user-published', handleUserPublished);
+		client.on('user-unpublished', handleUserUnPublished);
 		client.on('user-left', handleUserLeft);
 
 		await client.join(VITE_AGORA_APP_ID, VITE_AGORA_CHANNEL, null, UID);
