@@ -15,7 +15,6 @@ const client = AgoraRTC.createClient({
 	codec: 'vp8',
 });
 
-
 let localTracks: any = {
 	localVideoTrack: null,
 	localAudioTrack: null,
@@ -130,8 +129,10 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 		if (mediaType === 'video') {
 			setTimeout(() => {
+				// if(!cameraOff){
 				const videoPlayerElement: HTMLElement = document.getElementById(`videoplayer_${user.uid}`) || new HTMLElement();
 				user.videoTrack?.play(videoPlayerElement);
+				// }
 			}, 1500);
 		}
 
@@ -176,18 +177,17 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 
 		client.unpublish([localTracks.localVideoTrack]);
 
-		localTracks.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
-			cameraId: deviceId,
-			encoderConfig: { width: { max: 1280, min: 720 }, height: { max: 1280, min: 720 } },
-		});
-
 		if (!cameraOff) {
+			localTracks.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
+				cameraId: deviceId,
+				encoderConfig: { width: { max: 1280, min: 720 }, height: { max: 1280, min: 720 } },
+			});
+
 			const videoPlayerElement = document.getElementById(`videoplayer_${UID}`);
 			localTracks.localVideoTrack.play(videoPlayerElement);
-		}
 
-		client.publish([localTracks.localVideoTrack]);
-		return true
+			client.publish(localTracks.localVideoTrack);
+		}
 	};
 
 	const changeMicrophone = async (deviceId: string) => {
@@ -259,7 +259,7 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 				changeMicrophone,
 				enterRoom,
 				UID,
-				toggleMic
+				toggleMic,
 			}}
 		>
 			{children}

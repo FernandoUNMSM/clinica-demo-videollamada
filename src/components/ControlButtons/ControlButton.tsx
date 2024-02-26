@@ -42,7 +42,6 @@ export const ControlButtons = ({ setModal }: Props) => {
 			client.unpublish([localTracks.localVideoTrack]);
 		}
 
-		// localTracks.localVideoTrack.setMuted(!cameraOff);
 		setDisabled(false)
 	};
 
