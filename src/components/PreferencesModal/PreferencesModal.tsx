@@ -27,15 +27,24 @@ export default function PreferencesModal({ closeModal, isOpen }: Props) {
 		document.body.style.overflow = isOpen ? 'hidden' : 'auto';
 	}, [isOpen]);
 
-	const getDevices = async () => {
-		const camerasDevices = await AgoraRTC.getCameras();
+	const getMicrophones = async () => {
 		const microphonesDevices = await AgoraRTC.getMicrophones();
-		setCameras(camerasDevices);
 		setMicrophones(microphonesDevices);
 	};
 
+	const getCameras = async () => {
+		const camerasDevices = await AgoraRTC.getCameras();
+		setCameras(camerasDevices);
+	};
+
+	useEffect(()=>{
+		if(section === 'Video'){
+			getCameras();
+		}
+	}, [section])
+
 	useEffect(() => {
-		getDevices();
+		getMicrophones();
 		return () => {
 			document.body.style.overflow = 'auto';
 		};

@@ -176,21 +176,23 @@ export function AgoraContextProvider({ children }: { children: React.ReactNode }
 	};
 
 	const changeCamera = async (deviceId: string) => {
-		localTracks.localVideoTrack.stop();
-		localTracks.localVideoTrack.close();
+		if (localTracks.localVideoTrack) {
+			localTracks.localVideoTrack.stop();
+			localTracks.localVideoTrack.close();
 
-		client.unpublish([localTracks.localVideoTrack]);
+			client.unpublish([localTracks.localVideoTrack]);
 
-		if (!cameraOff) {
-			localTracks.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
-				cameraId: deviceId,
-				encoderConfig: { width: { max: 1280, min: 720 }, height: { max: 1280, min: 720 } },
-			});
+			if (!cameraOff) {
+				localTracks.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
+					cameraId: deviceId,
+					encoderConfig: { width: { max: 1280, min: 720 }, height: { max: 1280, min: 720 } },
+				});
 
-			const videoPlayerElement = document.getElementById(`videoplayer_${UID}`);
-			localTracks.localVideoTrack.play(videoPlayerElement);
+				const videoPlayerElement = document.getElementById(`videoplayer_${UID}`);
+				localTracks.localVideoTrack.play(videoPlayerElement);
 
-			client.publish(localTracks.localVideoTrack);
+				client.publish(localTracks.localVideoTrack);
+			}
 		}
 	};
 
